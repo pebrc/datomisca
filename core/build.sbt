@@ -1,7 +1,7 @@
 
 name := "datomisca-core"
 
-libraryDependencies += Dependencies.Compile.datomic
+libraryDependencies ++=  Seq(Dependencies.Compile.datomic, Dependencies.Compile.shapeless)
 
 mappings in (Compile, packageSrc) <++=
   (sourceManaged in Compile, managedSources in Compile) map { (base, srcs) =>
