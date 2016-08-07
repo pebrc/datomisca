@@ -17,9 +17,9 @@
 package datomisca
 
 import scala.collection.JavaConverters._
-import scala.util.{Try, Success, Failure}
-
+import scala.util.{Failure, Success, Try}
 import clojure.{lang => clj}
+import datomisca.query.UntypedQueryExecutor
 
 
 /** Main object containing:
@@ -33,6 +33,7 @@ object Datomic
      with TransactOps
      with DatomicFacilities
      with QueryExecutor
+     with UntypedQueryExecutor
      with macros.ExtraMacros
 
 /** Provides all Datomic Scala specific facilities
