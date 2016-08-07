@@ -17,6 +17,7 @@
 package datomisca
 import datomisca.query._
 import datomisca.{query => q}
+import scala.language.reflectiveCalls
 
 
 import org.specs2.mutable._
@@ -59,10 +60,11 @@ class DatomicQueryDslSpec extends Specification {
 
       implicit val conn = Datomic.connect(uri)
 
-      val query = q.find(Seq('e, 'n))
-//      where{
-//        unify('e person / "name" 'n),
-//        unify('e person /"character" person.character / "violent")}
+      val p =  'e %: $st
+
+      val query = q.find(Seq('e, 'n)) where Seq(
+        'e :: person / "name" :: 'n %: $st,
+        'e :: person / "character" :: (person.character / "violent") %: $st)
 
       Datomic.q(Query("""
         [ :find ?e ?n
