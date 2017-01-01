@@ -8,10 +8,6 @@ import shapeless._
 
 
 
-/**
-  * Created by p_brc on 06/08/2016.
-  */
-
 
 case class Find(spec: FindSpec, whereClauses: Option[WhereClauses] = None)  {
   def `with`(withClause: WithClause) = this
@@ -20,10 +16,9 @@ case class Find(spec: FindSpec, whereClauses: Option[WhereClauses] = None)  {
 
 }
 object Find {
-
-  val wPatternVar =  Witness("%")
-  type PatternVar = wPatternVar.T
-  type Input = SrcVar :+: Variable :+: PatternVar :+: CNil
+  val wRulesVar =  Witness("%")
+  type RulesVar = wRulesVar.T
+  type Input = SrcVar :+: Variable :+: Binding :+: RulesVar :+: CNil
 }
 
 trait FindSpec
@@ -59,9 +54,9 @@ object DataPattern {
 }
 
 trait Binding
-case class BindColl(v:Variable)
-case class BindTuple(vs: List[Variable])
-case class BindRel(vs: List[Variable])
+case class BindColl(v:Variable) extends Binding
+case class BindTuple(vs: List[Variable]) extends Binding
+case class BindRel(vs: List[Variable]) extends Binding
 
 
 

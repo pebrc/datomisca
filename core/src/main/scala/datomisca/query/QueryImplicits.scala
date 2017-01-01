@@ -1,6 +1,7 @@
 package datomisca.query
 import clojure.lang.Keyword
 import datomisca.query.DataPattern.DataTerm
+import datomisca.query.Find.{Input, RulesVar}
 import shapeless._
 
 import scala.language.implicitConversions
@@ -16,6 +17,10 @@ trait QueryImplicits {
 
   implicit def varToTerm[V](v: V)(implicit ev: V =>  Variable): DataTerm = Coproduct[DataTerm](ev.apply(v))
   implicit def kwToTerm(kw: Keyword): DataTerm = Coproduct[DataTerm](kw)
+
+  implicit def srcVarToInput(v:SrcVar):Input = Coproduct[Input](v)
+  implicit def bindingToInput(b:Binding):Input = Coproduct[Input](b)
+  implicit def rulesVarToInput(rv:RulesVar):Input = Coproduct[Input](rv)
 
 
 

@@ -91,7 +91,7 @@ class DatomicQueryDslSpec extends Specification {
 
       implicit val conn = Datomic.connect(uri)
 
-      //val q = Find(Seq('e)) inputs($db, BindColl('names)) where(Seq('e :: (person/"name") :: 'names %: $db))
+      val qry = Find(Seq('e)) inputs($db, BindColl('names)) where(Seq('e :: (person/"name") :: 'names %: $db))
 
       Datomic.q(Query("""
         [
