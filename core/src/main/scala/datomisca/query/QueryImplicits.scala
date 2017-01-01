@@ -1,7 +1,7 @@
 package datomisca.query
 import clojure.lang.Keyword
 import datomisca.query.DataPattern.DataTerm
-import datomisca.query.Find.{Input, RulesVar}
+import datomisca.query.find.{Input, RulesVar}
 import shapeless._
 
 import scala.language.implicitConversions

@@ -63,8 +63,8 @@ trait QueryToDatomic {
     }
   }
 
-  implicit def findCast(implicit conv: ToDatomic[ju.List[_], FindSpec], wconv: ToDatomic[ju.List[_], WhereClauses]):ToDatomicCast[Find] = ToDatomicCast[Find]{
-    (f:Find) => {
+  implicit def findCast(implicit conv: ToDatomic[ju.List[_], FindSpec], wconv: ToDatomic[ju.List[_], WhereClauses]):ToDatomicCast[find] = ToDatomicCast[find]{
+    (f:find) => {
       val wheres: ju.List[_] = f.whereClauses.map(wconv.to).getOrElse(ju.Collections.emptyList())
       datomic.Util.list(conv.to(f.spec).toArray ++ wheres.toArray: _*)
     }

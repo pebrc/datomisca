@@ -13,7 +13,7 @@ import scala.util.control.NonFatal
 private[datomisca] trait UntypedQueryExecutor {
   self: QueryExecutor =>
 
-  private[datomisca] def query[OutArgs](q: Find, in: AnyRef*)(implicit toDatomic: ToDatomicCast[Find], outConv: QueryResultToTuple[OutArgs]): Iterable[OutArgs] = {
+  private[datomisca] def query[OutArgs](q: find, in: AnyRef*)(implicit toDatomic: ToDatomicCast[find], outConv: QueryResultToTuple[OutArgs]): Iterable[OutArgs] = {
     new Iterable[OutArgs] {
       private val jColl: ju.Collection[ju.List[AnyRef]] = runQuery(toDatomic.to(q), in)
       override def isEmpty = jColl.isEmpty

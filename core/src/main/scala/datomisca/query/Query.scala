@@ -3,19 +3,19 @@ package datomisca.query
 
 import clojure.lang.Keyword
 import datomisca.query.DataPattern.DataTerm
-import datomisca.query.Find.Input
+import datomisca.query.find.Input
 import shapeless._
 
 
 
 
-case class Find(spec: FindSpec, whereClauses: Option[WhereClauses] = None)  {
+case class find(spec: FindSpec, whereClauses: Option[WhereClauses] = None)  {
   def `with`(withClause: WithClause) = this
   def where(whereClauses: WhereClauses) = this.copy(whereClauses = Some(whereClauses))
   def inputs(inputs: Input*) = this
 
 }
-object Find {
+object find {
   val wRulesVar =  Witness("%")
   type RulesVar = wRulesVar.T
   type Input = SrcVar :+: Variable :+: Binding :+: RulesVar :+: CNil
