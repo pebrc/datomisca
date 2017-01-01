@@ -16,7 +16,6 @@
 
 package datomisca
 import datomisca.query._
-import datomisca.{query => q}
 import scala.language.reflectiveCalls
 
 
@@ -60,7 +59,7 @@ class DatomicQueryDslSpec extends Specification {
 
       implicit val conn = Datomic.connect(uri)
 
-      val qry = q.Find(Seq('e, 'n)) where Seq(
+      val qry = Find(Seq('e, 'n)) where Seq(
         'e :: person / "name" :: 'n %: $db,
         'e :: person / "character" :: (person.character / "violent") %: $db)
 
@@ -77,10 +76,9 @@ class DatomicQueryDslSpec extends Specification {
 
       implicit val conn = Datomic.connect(uri)
 
-      val q = Query("""
-        [:find ?e :where [?e :person/name]]
-      """)
-      Datomic.q(q, Datomic.database) map {
+      val qry = Find(Seq('e)) where Seq('e :: (person / "name") %: $db)
+
+      Datomic.query[Any](qry, Datomic.database.underlying) foreach {
         case e: Long =>
           val entity = Datomic.database.entity(e)
           println(s"2 - entity: $e name: ${entity.get(person / "name")} - e: ${entity.get(person / "character")}")
@@ -92,6 +90,8 @@ class DatomicQueryDslSpec extends Specification {
     "3 - typed query with rule with params variable length" in {
 
       implicit val conn = Datomic.connect(uri)
+
+      //val q = Find(Seq('e)) inputs($db, BindColl('names)) where(Seq('e :: (person/"name") :: 'names %: $db))
 
       Datomic.q(Query("""
         [
