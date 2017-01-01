@@ -7,10 +7,12 @@ package datomisca.query
   * Created by p_brc on 06/08/2016.
   */
 
-case class find(spec: FindSpec, whereClauses: Option[WhereClauses] = None) {
+
+case class Find(spec: FindSpec, whereClauses: Option[WhereClauses] = None)  {
   def `with`(withClause: WithClause) = this
   def where(whereClauses: WhereClauses) = this.copy(whereClauses = Some(whereClauses))
   def inputs(inputs: Inputs) = this
+
 }
 
 trait FindSpec
@@ -24,9 +26,9 @@ trait FindElem
 case object PullExpr extends FindElem
 case object Aggregate extends FindElem
 
-class Variable(val sym:Symbol) extends FindElem
+case class Variable(val sym:Symbol) extends FindElem
 trait SrcVar
-case object $st extends SrcVar
+case object $db extends SrcVar
 
 case class WithClause(vars: Seq[String])
 case class Inputs(in: Seq[String])

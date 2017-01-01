@@ -60,9 +60,9 @@ class DatomicQueryDslSpec extends Specification {
 
       implicit val conn = Datomic.connect(uri)
 
-      val qry = q.find(Seq('e, 'n)) where Seq(
-        'e :: person / "name" :: 'n %: $st,
-        'e :: person / "character" :: (person.character / "violent") %: $st)
+      val qry = q.Find(Seq('e, 'n)) where Seq(
+        'e :: person / "name" :: 'n %: $db,
+        'e :: person / "character" :: (person.character / "violent") %: $db)
 
       Datomic.query[(Any, Any)](qry, Datomic.database.underlying) foreach {
         case (e: Long, n: String) =>

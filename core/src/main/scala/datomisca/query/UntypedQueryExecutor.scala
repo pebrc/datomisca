@@ -2,7 +2,7 @@ package datomisca.query
 
 import java.{util => ju}
 
-import datomisca.{QueryException, QueryExecutor, QueryProcessingException, QueryResultToTuple}
+import datomisca.{QueryException, QueryExecutor, QueryProcessingException, QueryResultToTuple, ToDatomicCast}
 
 import scala.concurrent._
 import scala.util.control.NonFatal
@@ -13,9 +13,9 @@ import scala.util.control.NonFatal
 private[datomisca] trait UntypedQueryExecutor {
   self: QueryExecutor =>
 
-  private[datomisca] def query[OutArgs](q: find, in: AnyRef*)(implicit outConv: QueryResultToTuple[OutArgs]): Iterable[OutArgs] = {
+  private[datomisca] def query[OutArgs](q: Find, in: AnyRef*)(implicit toDatomic: ToDatomicCast[Find], outConv: QueryResultToTuple[OutArgs]): Iterable[OutArgs] = {
     new Iterable[OutArgs] {
-      private val jColl: ju.Collection[ju.List[AnyRef]] = runQuery(q, in)
+      private val jColl: ju.Collection[ju.List[AnyRef]] = runQuery(toDatomic.to(q), in)
       override def isEmpty = jColl.isEmpty
       override def size = jColl.size
       override def iterator = new Iterator[OutArgs] {
@@ -26,8 +26,8 @@ private[datomisca] trait UntypedQueryExecutor {
     }
   }
 
-  def runQuery[OutArgs](q: find, input: Seq[AnyRef]) = {
-    val q = datomic.Util.readAll(new java.io.StringReader(find.toString())).asInstanceOf[java.util.List[AnyRef]]
+  def runQuery[OutArgs](q: AnyRef, input: Seq[AnyRef]) = {
+
     try {
       blocking {
         datomic.Peer.q(q, input: _*)
